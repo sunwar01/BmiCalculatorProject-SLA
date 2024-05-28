@@ -1,0 +1,6 @@
+@BmiCalculatorAPI_SLA_HostAddress = http://localhost:5219
+
+GET {{BmiCalculatorAPI_SLA_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

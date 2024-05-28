@@ -1,0 +1,146 @@
+kind: pipeline
+type: docker
+name: integration
+ 
+steps:
+
+  - name: frontend-static-code-analysis
+    image: boulundeasv/dotnet-sdk-with-java
+    environment:
+      SONARSECRET:
+        from_secret: SonarQubeSecretFrontend
+    commands:
+      - dotnet tool list --global 
+      - dotnet sonarscanner begin
+          /k:"easv-devops_BmiCalculatorFrontend-SLA_AY--xoyvEVvRW2O60GNN"
+          /d:sonar.host.url="http://sonar.setgo.dk:9000"  
+          /d:sonar.token="$SONARSECRET"
+          /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          /d:sonar.qualitygate.wait=true
+      - dotnet build --no-incremental
+      - dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+      - dotnet sonarscanner end /d:sonar.token="$SONARSECRET"
+
+           
+
+---
+
+kind: pipeline
+type: docker
+name: deliver
+depends_on:
+  - integration
+
+steps:
+
+
+  - name: publish api image to docker
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DockerUsername
+      password:
+        from_secret: DockerPassword
+      context: .
+      dockerfile: BmiCalculatorAPI-SLA/Dockerfile
+      repo: sunwar01/bmi-calculator-api
+      tags:
+        - staging
+
+
+  - name: publish frontend image to docker
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DockerUsername
+      password:
+        from_secret: DockerPassword
+      context: .
+      dockerfile: BmiCalculatorFrontend-SLA/Dockerfile
+      repo: sunwar01/bmi-calculator-frontend
+      tags:
+        - staging
+        
+
+
+        
+        
+  - name: publish api to test environment
+    image: appleboy/drone-ssh
+    depends_on:
+      - publish frontend api to docker
+    settings:
+      host: 45.90.123.11
+      username: root
+      password:
+        from_secret: PasswordTest
+      script:
+        - docker pull sunwar01/bmi-calculator-api:staging
+        - docker stop bmi-calculator-api || true
+        - docker rm bmi-calculator-api || true
+        - docker run -d -p 5001:8080 --name bmi-calculator-api sunwar01/bmi-calculator-api:staging
+
+        
+        
+        
+  - name: publish frontend to test environment
+    image: appleboy/drone-ssh
+    depends_on:
+      - publish frontend image to docker
+    settings:
+      host: 45.90.123.11
+      username: root
+      password:
+        from_secret: PasswordTest
+      script:
+        - docker pull sunwar01/bmi-calculator-frontend:staging
+        - docker stop bmi-calculator-frontend || true
+        - docker rm bmi-calculator-frontend || true
+        - docker run -d -p 5002:8080 --name bmi-calculator-frontend sunwar01/bmi-calculator-frontend:staging
+
+        
+        
+        
+  - name: performance tests
+    image: grafana/k6
+    commands:
+     - k6 run /drone/src/Tests/spike_test.js
+
+        
+  - name: publish api to production environment
+    image: appleboy/drone-ssh
+    depends_on:
+      - performance tests
+    settings:
+      host: 45.90.123.12
+      username: root
+      password:
+        from_secret: PasswordProd
+      script:
+        - docker pull sunwar01/bmi-calculator-api:staging
+        - docker stop bmi-calculator-api || true
+        - docker rm bmi-calculator-api || true
+        - docker run -d -p 5003:8080 --name bmi-calculator-api sunwar01/bmi-calculator-api:staging
+
+
+    
+  - name: publish frontend to production environment
+    image: appleboy/drone-ssh
+    depends_on:
+      - performance tests
+    settings:
+      host: 45.90.123.12
+      username: root
+      password:
+        from_secret: PasswordProd
+      script:
+        - docker pull sunwar01/bmi-calculator-frontend:staging
+        - docker stop bmi-calculator-frontend || true
+        - docker rm bmi-calculator-frontend || true
+        - docker run -d -p 5004:8080 --name bmi-calculator-frontend sunwar01/bmi-calculator-frontend:staging
+
+
+
+ 
+
+ 
