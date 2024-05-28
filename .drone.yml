@@ -103,6 +103,8 @@ steps:
         
   - name: performance tests
     image: grafana/k6
+    depends_on:
+      - publish api to test environment
     commands:
      - k6 run /drone/src/Tests/spike_test.js
 
