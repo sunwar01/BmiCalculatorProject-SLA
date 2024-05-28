@@ -68,7 +68,7 @@ steps:
   - name: publish api to test environment
     image: appleboy/drone-ssh
     depends_on:
-      - publish frontend api to docker
+      - publish api image to docker
     settings:
       host: 45.90.123.11
       username: root
