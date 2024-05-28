@@ -8,11 +8,11 @@ steps:
     image: boulundeasv/dotnet-sdk-with-java
     environment:
       SONARSECRET:
-        from_secret: SonarQubeSecretFrontend
+        from_secret: SonarQubeSecret
     commands:
       - dotnet tool list --global 
       - dotnet sonarscanner begin
-          /k:"easv-devops_BmiCalculatorFrontend-SLA_AY--xoyvEVvRW2O60GNN"
+          /k:"easv-devops_BmiCalculatorProject-SLA_AY_BBj_LEVvRW2O60GPZ"
           /d:sonar.host.url="http://sonar.setgo.dk:9000"  
           /d:sonar.token="$SONARSECRET"
           /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
@@ -73,7 +73,7 @@ steps:
       host: 45.90.123.11
       username: root
       password:
-        from_secret: PasswordTest
+        from_secret: ContaboPassword
       script:
         - docker pull sunwar01/bmi-calculator-api:staging
         - docker stop bmi-calculator-api || true
@@ -91,7 +91,7 @@ steps:
       host: 45.90.123.11
       username: root
       password:
-        from_secret: PasswordTest
+        from_secret: ContaboPassword
       script:
         - docker pull sunwar01/bmi-calculator-frontend:staging
         - docker stop bmi-calculator-frontend || true
@@ -115,7 +115,7 @@ steps:
       host: 45.90.123.12
       username: root
       password:
-        from_secret: PasswordProd
+        from_secret: ContaboPassword
       script:
         - docker pull sunwar01/bmi-calculator-api:staging
         - docker stop bmi-calculator-api || true
@@ -132,7 +132,7 @@ steps:
       host: 45.90.123.12
       username: root
       password:
-        from_secret: PasswordProd
+        from_secret: ContaboPassword
       script:
         - docker pull sunwar01/bmi-calculator-frontend:staging
         - docker stop bmi-calculator-frontend || true
