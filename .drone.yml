@@ -61,84 +61,36 @@ steps:
       tags:
         - staging
         
-
-
         
-        
-  - name: publish api to test environment
-    image: appleboy/drone-ssh
+
+  - name: trigger update for test
+    image: curlimages/curl
+    commands:
+      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
+      - sleep 10
     depends_on:
       - publish api image to docker
-    settings:
-      host: 45.90.123.11
-      username: root
-      password:
-        from_secret: ContaboPassword
-      script:
-        - docker pull sunwar01/bmi-calculator-api:staging
-        - docker stop bmi-calculator-api || true
-        - docker rm bmi-calculator-api || true
-        - docker run -d -p 5001:8080 --name bmi-calculator-api sunwar01/bmi-calculator-api:staging
-
-        
-        
-        
-  - name: publish frontend to test environment
-    image: appleboy/drone-ssh
-    depends_on:
       - publish frontend image to docker
-    settings:
-      host: 45.90.123.11
-      username: root
-      password:
-        from_secret: ContaboPassword
-      script:
-        - docker pull sunwar01/bmi-calculator-frontend:staging
-        - docker stop bmi-calculator-frontend || true
-        - docker rm bmi-calculator-frontend || true
-        - docker run -d -p 5002:8080 --name bmi-calculator-frontend sunwar01/bmi-calculator-frontend:staging
 
-        
-        
         
   - name: performance tests
     image: grafana/k6
     depends_on:
-      - publish api to test environment
+      - trigger update for test
     commands:
      - k6 run /drone/src/Tests/spike_test.js
 
         
-  - name: publish api to production environment
-    image: appleboy/drone-ssh
+  - name: trigger update for prod
+    image: curlimages/curl
+    commands:
+      - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer mytoken' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
+      - sleep 10
     depends_on:
       - performance tests
-    settings:
-      host: 45.90.123.12
-      username: root
-      password:
-        from_secret: ContaboPassword
-      script:
-        - docker pull sunwar01/bmi-calculator-api:staging
-        - docker stop bmi-calculator-api || true
-        - docker rm bmi-calculator-api || true
-        - docker run -d -p 5003:8080 --name bmi-calculator-api sunwar01/bmi-calculator-api:staging
 
 
-    
-  - name: publish frontend to production environment
-    image: appleboy/drone-ssh
-    depends_on:
-      - performance tests
-    settings:
-      host: 45.90.123.12
-      username: root
-      password:
-        from_secret: ContaboPassword
-      script:
-        - docker pull sunwar01/bmi-calculator-frontend:staging
-        - docker stop bmi-calculator-frontend || true
-        - docker rm bmi-calculator-frontend || true
-        - docker run -d -p 5004:8080 --name bmi-calculator-frontend sunwar01/bmi-calculator-frontend:staging
 
+ 
 
+ 
