@@ -19,24 +19,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       - "com.example.environment=test"
 
-  bmi-calculator-api-prod:
-    image: sunwar01/bmi-calculator-api:staging
-    ports:
-      - "5003:8080"
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "com.example.environment=prod"
-  
-  bmi-calculator-frontend-prod:
-    image: sunwar01/bmi-calculator-frontend:staging
-    ports:
-      - "5004:8080"
-    depends_on:
-      - bmi-calculator-api-prod
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
-      - "com.example.environment=prod"
-
   watchtower:
     image: containrrr/watchtower
     volumes:

@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  bmi-calculator-api-prod:
+    image: sunwar01/bmi-calculator-api:staging
+    ports:
+      - "5003:8080"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.example.environment=prod"
+  
+  bmi-calculator-frontend-prod:
+    image: sunwar01/bmi-calculator-frontend:staging
+    ports:
+      - "5004:8080"
+    depends_on:
+      - bmi-calculator-api-prod
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.example.environment=prod"
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --debug --http-api-update
+    environment:
+      - WATCHTOWER_HTTP_API_TOKEN=Paatysk1234
+      - WATCHTOWER_LABEL_ENABLE=true
+    ports:
+      - "8080:8080"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
