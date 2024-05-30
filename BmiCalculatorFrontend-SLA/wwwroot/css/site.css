@@ -20,3 +20,28 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.bmiContainer {
+  margin-left: 300px;
+  margin-right: 300px;
+}
+.resultBtn{
+  position: fixed;
+  left: 50%;
+}
+.btmBMIResult{
+  padding-top: 20px;
+}
+
+.bmiResult{
+  padding-top: 20px;
+}
+.averageCal{
+  padding-top: 30px;
+}
+.resultBtnClass{
+  padding-top: 10px;
+}
+.outputField{
+  margin-top: 40px;
+}

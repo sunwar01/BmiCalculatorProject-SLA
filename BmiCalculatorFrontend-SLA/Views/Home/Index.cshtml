@@ -1,8 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "BMICalculator";
 }
 
 <div class="text-center">
-    <h1 class="display-4">ThisIsATest2</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <h1 class="display-4">BMI Calculator</h1>
+</div>    
+
+    <!-- BMI Calculator Form -->
+    <div class="bmiContainer">
+        <div class="bmiWeight">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" class="form-control" id="weight" placeholder="Enter weight in kg">
+        </div>
+        
+        <div class="bmiHeight">
+            <label for="height">Height</label>
+            <input type="number" class="form-control" id="height" placeholder="Enter height in cm">
+        </div>
+        
+        <div class="btmBMIResult">
+            <button class="resultBtn" id="calculate">Calculate</button>
+        </div>
+        
+        <div class="bmiResult">
+            <label for="result">Result</label>
+            <input type="text" class="form-control" id="result" readonly>
+        </div>
+        
+        <div class="averageCal">
+            <label for="calculateAverage">Calculate average of all BMIs</label>
+            <div class="resultBtnClass">
+                <button class="resultBtn" id="calculateAverage">Calculate</button>
+            </div>
+            <div class="outputField">
+                <input type="text" class="form-control" id="average" readonly>
+            </div>    
+        </div>
+    </div>    
