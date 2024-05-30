@@ -43,6 +43,11 @@ public class DatabaseService
         
         using var cmd = new MySqlCommand(sql, connection);
         
+        Console.WriteLine("saving measurement:");
+        
+        Console.WriteLine("height: " + measurement.Height);
+        Console.WriteLine("weight: " + measurement.Weight);
+        
         cmd.Parameters.AddWithValue("@height", measurement.Height);
         cmd.Parameters.AddWithValue("@weight", measurement.Weight);
 

@@ -6,8 +6,8 @@
 const bmiResults = [];
 
 document.getElementById('calculate').addEventListener('click', function() {
-    var weight = parseFloat(document.getElementById('weight').value);
-    var height = parseFloat(document.getElementById('height').value) / 100;
+    let weight = parseFloat(document.getElementById('weight').value);
+    let height = parseFloat(document.getElementById('height').value);
 
 
     const jsonData = { id: 1, height: height, weight: weight };
@@ -22,59 +22,86 @@ document.getElementById('calculate').addEventListener('click', function() {
     
     const requestUrl = "http://45.90.123.12:5003/measurements";
 
-
-
-    fetch(requestUrl, options)
-        .then(response => {
-            // Check if the request was successful
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            // Parse the response as JSON
-            return response.json();
-        })
-        .then(data => {
-            // Handle the JSON data
-            console.log(data);
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the fetch
-            console.error('Fetch error:', error);
-        });
-    
-    
-    
     if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
         alert('Please enter valid values for weight and height.');
         return;
-    }
+    }else {
 
-    const bmi = (weight / (height * height)).toFixed(2);
-    document.getElementById('result').value = bmi;
+        
+        console.log("posting:" + options.body);
+        
+        fetch(requestUrl, options)
+            .then(response => {
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Parse the response as JSON
+                return response.json();
+            })
+            .then(data => {
+                // Handle the JSON data
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch
+                console.error('Fetch error:', error);
+            });
+
+    }
+    
+
+    height = height / 100;
+
+    let bmi = (weight / (height * height));
+    
+    console.log("height:" + height)
+    console.log("weight:" + weight)
+    console.log("bmi:" + bmi);
+    
+    document.getElementById('result').value = bmi.valueOf();
     bmiResults.push(parseFloat(bmi));
 });
 
-document.getElementById('calculateAverage').addEventListener('click', function() {
+document.getElementById('calculateAverage').addEventListener('click', async function () {
 
-    
-    var bmiMeasurements;
+
+    let bmiMeasurements;
 
 
     const requestUrl = "http://45.90.123.12:5003/measurements";
 
-
-    fetch(requestUrl) // api for the get request
-        .then(response => response.json())
-        .then(data => bmiMeasurements = data);
-    
-    
-    
-    if (bmiMeasurements.length === 0) {
-        alert('No BMI values to calculate the average.');
-        return;
+    async function exampleFetch() {
+        const response = await fetch(requestUrl);
+        bmiMeasurements = await response.json();
+        console.log(bmiMeasurements);
     }
 
-    const sum = bmiResults.reduce((a, b) => a + b, 0);
+    await exampleFetch()
+
+
+    
+
+    //bmiMeasurements = JSON.parse(bmiMeasurements);
+
+    let bmiDataResults = [];
+
+    for (let i = 0; i < bmiMeasurements.length; i++) {
+        console.log("weight: " + bmiMeasurements[i].weight);
+        console.log("height in cm: " + bmiMeasurements[i].height);
+        console.log("height in m: " + bmiMeasurements[i].height / 100)
+        let bmi = bmiMeasurements[i].weight / ((bmiMeasurements[i].height / 100) * (bmiMeasurements[i].height / 100));
+        console.log("bmi: " + bmi);
+        bmiDataResults.push(bmi);
+    }
+
+    console.log(bmiDataResults);
+
+    console.log("setting average");
+
+    const sum = bmiDataResults.reduce((a, b) => a + b, 0);
+    console.log("sum: " + sum);
     const average = (sum / bmiMeasurements.length).toFixed(2);
+    console.log("average: " + average);
     document.getElementById('average').value = average;
 });
