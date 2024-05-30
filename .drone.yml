@@ -79,6 +79,8 @@ steps:
       - trigger update for test
     commands:
      - k6 run /drone/src/Tests/spike_test.js
+     - k6 run /drone/src/Tests/load_test.js
+     - k6 run /drone/src/Tests/stress_test.js
 
         
   - name: trigger update for prod
