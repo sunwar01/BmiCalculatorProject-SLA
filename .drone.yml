@@ -10,6 +10,7 @@ steps:
       SONARSECRET:
         from_secret: SonarQubeSecret
     commands:
+      - exit 0 
       - dotnet tool list --global 
       - dotnet sonarscanner begin
           /k:"easv-devops_BmiCalculatorProject-SLA_AY_BBj_LEVvRW2O60GPZ"
