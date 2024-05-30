@@ -48,13 +48,41 @@ public class DatabaseService
 
         cmd.ExecuteNonQuery();
     }
+
+    private string user = null; 
+    private string password = null;
     
-    
+    private void ExtractCredentials()
+    {
+        string path = "db/flyway.conf";
+        
+        string[] lines = System.IO.File.ReadAllLines(path);
+        
+        foreach (string line in lines)
+        {
+            if (line.StartsWith("flyway.user"))
+            {
+                string[] parts = line.Split("=");
+                user = parts[1];
+            }
+            else if (line.StartsWith("flyway.password"))
+            {
+                string[] parts = line.Split("=");
+                password = parts[1];
+            }
+        }
+        
+     
+    }
     
     
     private MySqlConnection GetConnection()
     {
-        var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=user;PWD=password");
+        
+        ExtractCredentials();   
+       
+        
+        var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=" + user + ";PWD=" + password);
         
         
         connection.Open();
