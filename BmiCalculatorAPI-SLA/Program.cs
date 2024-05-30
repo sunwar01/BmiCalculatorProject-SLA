@@ -21,13 +21,21 @@ app.UseHttpsRedirection();
 
 
 app.MapGet("/measurements", () =>
+{
+    DatabaseService dbService = new DatabaseService();
+    
+    var res = dbService.GetMeasurements();
+
+    foreach (BMIMeasurement measurement in res)
     {
-        DatabaseService dbService = new DatabaseService();
-        return Results.Ok(dbService.GetMeasurements());
+        Console.WriteLine(measurement.Id);
+        Console.WriteLine(measurement.Height);
+        Console.WriteLine(measurement.Weight);
         
-    })
-    .WithName("measurements")
-    .WithOpenApi();
+    }
+    
+    return Results.Ok(res);
+});
 
 
 app.MapPost("/measurements", (BMIMeasurement measurement) =>

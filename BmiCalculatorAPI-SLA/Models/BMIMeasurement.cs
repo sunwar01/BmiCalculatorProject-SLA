@@ -20,11 +20,42 @@ public class BMIMeasurement
     }
 
 
+    public BMIMeasurement()
+    {
+        
+    }
+
+
 
     private double calculateBMI()
     {
         return Weight / Math.Pow(Height, 2);
     }
+    
+    
+    public string getBMICategory()
+    {
+        double bmi = calculateBMI();
+        
+        if (bmi < 18.5)
+        {
+            return "Underweight";
+        }
+        else if (bmi < 24.9)
+        {
+            return "Normal weight";
+        }
+        else if (bmi < 29.9)
+        {
+            return "Overweight";
+        }
+        else
+        {
+            return "Obese";
+        }
+    }
+    
+    
 
 
 }
