@@ -5,6 +5,12 @@ services:
     image: sunwar01/bmi-calculator-api:staging
     ports:
       - "5001:8080"
+    environment:
+      - DB_HOST=45.90.123.13
+      - DB_PORT=3306
+      - DB_NAME=BMIDatabase
+      - DB_USER=user
+      - DB_PASSWORD=password
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
       - "com.example.environment=test"
@@ -19,6 +25,9 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       - "com.example.environment=test"
 
+
+
+
   watchtower:
     image: containrrr/watchtower
     volumes:
@@ -31,3 +40,5 @@ services:
       - "8080:8080"
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
+
+

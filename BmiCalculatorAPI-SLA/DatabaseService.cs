@@ -22,7 +22,12 @@ public class DatabaseService
 
         while (rdr.Read())
         {
-            result.Add(new BMIMeasurement(rdr.GetInt32(0), rdr.GetDouble(1), rdr.GetDouble(2)));
+            int id = rdr.GetInt32(0);
+            double height = rdr.GetDouble(1);
+            double weight = rdr.GetDouble(2);
+            
+
+            result.Add(new BMIMeasurement(id, height, weight));
         }
 
         return result;
@@ -38,8 +43,8 @@ public class DatabaseService
         
         using var cmd = new MySqlCommand(sql, connection);
         
-        cmd.Parameters.AddWithValue("@height", measurement.height);
-        cmd.Parameters.AddWithValue("@weight", measurement.weight);
+        cmd.Parameters.AddWithValue("@height", measurement.Height);
+        cmd.Parameters.AddWithValue("@weight", measurement.Weight);
 
         cmd.ExecuteNonQuery();
     }

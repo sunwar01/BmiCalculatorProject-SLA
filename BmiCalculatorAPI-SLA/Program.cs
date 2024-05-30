@@ -34,7 +34,7 @@ app.MapPost("/measurements", (BMIMeasurement measurement) =>
 {
     DatabaseService dbService = new DatabaseService();
     dbService.SaveMeasurements(measurement);
-    return Results.Created($"/measurements/{measurement.id}", measurement);
+    return Results.Created($"/measurements/{measurement.Id}", measurement);
 });
 
 app.Run();
