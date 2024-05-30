@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 
-fixture`BMI Calculation test`
-    .page`http://45.90.123.11:5002/`;
+fixture(`BMI Calculation test`)
+    .page(`http://45.90.123.11:5002/`);
 	
 
 test('Do a bmi calculation', async t => {
