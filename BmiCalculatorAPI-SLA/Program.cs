@@ -11,6 +11,13 @@ builder.Services.AddCors();
 
 var app = builder.Build();
 
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
