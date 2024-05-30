@@ -106,7 +106,6 @@ steps:
     depends_on:
       - performance tests
     commands:
-      - exit 0
       - testcafe chromium:headless /drone/src/Tests/bmi_calculation_ui_test.js
 
         
