@@ -72,7 +72,7 @@ steps:
       SONARSECRET:
         from_secret: ContaboPassword
     commands:
-      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer "$SONARSECRET"' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
+      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer $SONARSECRET' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
       - sleep 10
 
 
@@ -90,8 +90,8 @@ steps:
       - exit 0
       - flyway migrate
           -url=jdbc:mariadb://45.90.123.12:5003/:3306/BMIDatabase
-          -user="$SONARSECRETUSER"
-          -password="$SONARSECRETPASSWORD"
+          -user=$SONARSECRETUSER
+          -password=$SONARSECRETPASSWORD
           -locations=filesystem:./db/sql
 
         
@@ -124,7 +124,7 @@ steps:
       SONARSECRET:
         from_secret: ContaboPassword
     commands:
-      - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer "$SONARSECRET"' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
+      - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer $SONARSECRET' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
       - sleep 10
 
 
