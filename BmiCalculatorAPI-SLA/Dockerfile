@@ -3,6 +3,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+
+COPY db/flyway.conf /app/db/flyway.conf
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["BmiCalculatorAPI-SLA/BmiCalculatorAPI-SLA.csproj", "BmiCalculatorAPI-SLA/"]
