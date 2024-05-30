@@ -65,29 +65,57 @@ steps:
 
   - name: trigger update for test
     image: curlimages/curl
-    commands:
-      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer Paatysk1234' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
-      - sleep 10
     depends_on:
       - publish api image to docker
       - publish frontend image to docker
+    commands:
+      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer Paatysk1234' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
+      - sleep 10
 
+
+        
+  - name: update database
+    image: flyway/flyway
+    depends_on:
+      - trigger update for test
+    commands:
+      - exit 0
+      - flyway migrate
+          -url=jdbc:mariadb://45.90.123.12:5003/:3306/BMI-Measurement
+          -user=viSkalHaveLavetEnBruger
+          -password=viSkalHaveLavetEnBruger
+          -locations=filesystem:./db/sql
+
+        
+        
         
   - name: performance tests
     image: grafana/k6
     depends_on:
-      - trigger update for test
+      - update database
     commands:
      - k6 run /drone/src/Tests/spike_test.js
+     - k6 run /drone/src/Tests/load_test.js
+     - k6 run /drone/src/Tests/stress_test.js
+
+
+  - name: end-to-end tests
+    image: testcafe/testcafe
+    depends_on:
+      - performance tests
+    commands:
+      - exit 0
+      - testcafe chromium:headless /drone/src/Tests/bmi_calculation_ui_test.js
 
         
   - name: trigger update for prod
     image: curlimages/curl
+    depends_on:
+      - end-to-end tests
     commands:
       - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer Paatysk1234' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
       - sleep 10
-    depends_on:
-      - performance tests
+
 
 
 

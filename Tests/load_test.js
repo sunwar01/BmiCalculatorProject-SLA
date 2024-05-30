@@ -10,7 +10,7 @@ export let options = {
 };
 
 export default function () {
-  let response = http.get('http://localhost:5222/api/v1/catalog/items');
+  let response = http.get('http://45.90.123.11:5001/weatherforecast');
   check(response, {
     'status is 200': (r) => r.status === 200,
   });
