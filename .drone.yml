@@ -84,7 +84,7 @@ steps:
           -url=jdbc:mariadb://45.90.123.13:3306/BMIDatabase
           -user=user
           -password=password
-          -locations=filesystem:./db/sql
+          -locations=filesystem:./BmiCalculatorAPI-SLA/db/sql
 
         
         
