@@ -27,7 +27,7 @@ public class BMIMeasurement
 
 
 
-    private double calculateBMI()
+    public double calculateBMI()
     {
         return Weight / Math.Pow(Height, 2);
     }

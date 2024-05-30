@@ -1,5 +1,5 @@
 CREATE TABLE BMI_Measurement (
     id INT AUTO_INCREMENT PRIMARY KEY,
     weight DOUBLE NOT NULL,
-    height DOUBLE NOT NULL,
+    height DOUBLE NOT NULL
 )
