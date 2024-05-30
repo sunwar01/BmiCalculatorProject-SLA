@@ -1,3 +1,6 @@
+using BmiCalculatorAPI_SLA;
+using BmiCalculatorAPI_SLA.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,29 +19,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing2", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/measurements", () =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
+        DatabaseService dbService = new DatabaseService();
+        return Results.Ok(dbService.GetMeasurements());
+        
     })
-    .WithName("GetWeatherForecast")
+    .WithName("measurements")
     .WithOpenApi();
 
-app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+app.MapPost("/measurements", (BMIMeasurement measurement) =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    DatabaseService dbService = new DatabaseService();
+    dbService.SaveMeasurements(measurement);
+    return Results.Created($"/measurements/{measurement.id}", measurement);
+});
+
+app.Run();

@@ -2,11 +2,22 @@ namespace BmiCalculatorAPI_SLA.Models;
 
 public class BMIMeasurement
 {
-    private double height;
-    private double weight;
-
-    private DateTime timestamp;
-
+    public int id;
+    public double height;
+    public double weight;
+    
+    public BMIMeasurement(int id, double height, double weight)
+    {
+        this.id = id;
+        this.height = height;
+        this.weight = weight;
+    }
+    
+    public BMIMeasurement(double height, double weight)
+    {
+        this.height = height;
+        this.weight = weight;
+    }
 
 
 
