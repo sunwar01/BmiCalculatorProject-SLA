@@ -79,11 +79,12 @@ public class DatabaseService
     private MySqlConnection GetConnection()
     {
         
-        ExtractCredentials();   
+       // ExtractCredentials();   
        
         
-        var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=" + _user + ";PWD=" + _password);
+       // var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=" + _user + ";PWD=" + _password);
         
+       var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=user;PWD=password");
         
         connection.Open();
         return connection;
