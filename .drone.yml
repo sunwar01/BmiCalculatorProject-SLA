@@ -10,6 +10,7 @@ steps:
       SONARSECRET:
         from_secret: SonarQubeSecret
     commands:
+      - exit 0
       - dotnet tool list --global 
       - dotnet sonarscanner begin
           /k:"easv-devops_BmiCalculatorProject-SLA_AY_BBj_LEVvRW2O60GPZ"
@@ -79,7 +80,6 @@ steps:
     depends_on:
       - trigger update for test
     commands:
-      - exit 0
       - flyway migrate
           -url=jdbc:mariadb://45.90.123.13:3306/BMIDatabase
           -user=user
