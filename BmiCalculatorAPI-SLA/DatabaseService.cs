@@ -23,8 +23,8 @@ public class DatabaseService
         while (rdr.Read())
         {
             int id = rdr.GetInt32(0);
-            double height = rdr.GetDouble(1);
-            double weight = rdr.GetDouble(2);
+            double weight = rdr.GetDouble(1);
+            double height = rdr.GetDouble(2);
             
 
             result.Add(new BMIMeasurement(id, height, weight));
