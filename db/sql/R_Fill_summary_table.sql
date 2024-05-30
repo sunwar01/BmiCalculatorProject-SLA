@@ -1,5 +1,5 @@
-DELETE FROM Summaries;
-INSERT INTO Summaries (summary) VALUES
+DELETE FROM BMI_Measurement;
+INSERT INTO BMI_Measurement VALUES
 (80.0,180.0),
 (90.0,180.0),
 (70.0,180.0),
