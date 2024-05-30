@@ -85,6 +85,7 @@ public class DatabaseService
         var connection = new MySqlConnection("Server=45.90.123.13;Port=3306;Database=BMIDatabase;UID=" + _user + ";PWD=" + _password);
         
         
+        
         connection.Open();
         return connection;
     }

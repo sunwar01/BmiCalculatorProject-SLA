@@ -6,9 +6,27 @@
 const bmiResults = [];
 
 document.getElementById('calculate').addEventListener('click', function() {
-    const weight = parseFloat(document.getElementById('weight').value);
-    const height = parseFloat(document.getElementById('height').value) / 100;
+    var weight = parseFloat(document.getElementById('weight').value);
+    var height = parseFloat(document.getElementById('height').value) / 100;
 
+    var data1;
+
+    const requestUrl = "http://localhost:5219/measurements";fetch(requestUrl)
+        .then(response => response.json())
+        .then(data => {
+            
+            data1 = data
+        })
+        .then(data => {
+            // do something with the data the API has returned
+        })
+    
+    console.log(requestUrl)
+    console.log(data1)
+        
+    
+    
+    
     if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
         alert('Please enter valid values for weight and height.');
         return;
