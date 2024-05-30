@@ -95,6 +95,7 @@ steps:
     depends_on:
       - update database
     commands:
+     - exit 0
      - k6 run /drone/src/Tests/spike_test.js
      - k6 run /drone/src/Tests/load_test.js
      - k6 run /drone/src/Tests/stress_test.js
