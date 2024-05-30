@@ -4,7 +4,6 @@ EXPOSE 80
 EXPOSE 443
 
 
-COPY db/flyway.conf /app/db/flyway.conf
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -19,5 +18,8 @@ RUN dotnet publish "BmiCalculatorAPI-SLA.csproj" -c Release -o /app/publish /p:U
 
 FROM base AS final
 WORKDIR /app
+
+COPY db/flyway.conf /app/db/flyway.conf
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BmiCalculatorAPI-SLA.dll"]
