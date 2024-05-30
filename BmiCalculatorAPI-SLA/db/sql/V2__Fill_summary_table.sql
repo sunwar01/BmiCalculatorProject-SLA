@@ -1,4 +1,3 @@
-DELETE FROM BMI_Measurement;
 INSERT INTO BMI_Measurement VALUES
 (1, 80.0,180.0),
 (2, 90.0,180.0),
