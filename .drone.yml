@@ -68,8 +68,11 @@ steps:
     depends_on:
       - publish api image to docker
       - publish frontend image to docker
+    environment:
+      SONARSECRET:
+        from_secret: ContaboPassword
     commands:
-      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer Paatysk1234' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
+      - "curl --fail -X POST 'http://45.90.123.11:8080/v1/update' -H 'Authorization: Bearer "$SONARSECRET"' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=test\"}}'"
       - sleep 10
 
 
@@ -78,12 +81,17 @@ steps:
     image: flyway/flyway
     depends_on:
       - trigger update for test
+    environment:
+      SONARSECRETUSER:
+        from_secret: dbUser
+      SONARSECRETPASSWORD:
+        from_secret: dbPassword
     commands:
       - exit 0
       - flyway migrate
-          -url=jdbc:mariadb://45.90.123.12:5003/:3306/BMI-Measurement
-          -user=viSkalHaveLavetEnBruger
-          -password=viSkalHaveLavetEnBruger
+          -url=jdbc:mariadb://45.90.123.12:5003/:3306/BMIDatabase
+          -user="$SONARSECRETUSER"
+          -password="$SONARSECRETPASSWORD"
           -locations=filesystem:./db/sql
 
         
@@ -112,8 +120,11 @@ steps:
     image: curlimages/curl
     depends_on:
       - end-to-end tests
+    environment:
+      SONARSECRET:
+        from_secret: ContaboPassword
     commands:
-      - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer Paatysk1234' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
+      - "curl --fail -X POST 'http://45.90.123.12:8080/v1/update' -H 'Authorization: Bearer "$SONARSECRET"' -H 'Content-Type: application/json' -d '{\"filters\": {\"label\": \"com.example.environment=prod\"}}'"
       - sleep 10
 
 
