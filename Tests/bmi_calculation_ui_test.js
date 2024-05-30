@@ -6,7 +6,7 @@ fixture`BMI Calculation test`
 
 test('Do a bmi calculation', async t => {
    
-    const weightInput = Selector('#weight']');
+    const weightInput = Selector('#weight');
     const heightInput = Selector('#height');
     const calculateButton = Selector('#calculate');
 
