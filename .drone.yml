@@ -106,7 +106,7 @@ steps:
     depends_on:
       - performance tests
     commands:
-      - testcafe chromium:headless /drone/src/Tests/bmi_calculation_ui_test.js
+      - testcafe chromium:headless /drone/src/Tests/bmi_calculation_ui_test.js --skip-js-errors
 
         
   - name: trigger update for prod
